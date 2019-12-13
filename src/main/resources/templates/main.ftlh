@@ -1,3 +1,4 @@
+<#include "parts/security.ftlh">
 <#import "parts/common.ftlh" as c>
 
 <@c.page>
@@ -40,7 +41,7 @@
         <#list messages as message>
             <div class="card my-3">
                 <#if message.filename??>
-                    <img src="/img/${message.filename}" class="card-img-top">
+                    <img src="/img/${message.filename}" class="card-img-top" height=200px width=300px>
                 </#if>
                 <div class="m-2">
                     <span>${message.text}</span>
@@ -49,6 +50,13 @@
                 <div class="card-footer text-muted">
                     ${message.authorName}
                 </div>
+                <#if isAdmin>
+                    <form action="/delete/${message.id}" method="get">
+                <div>
+                    <button type="submit" class="btn btn-danger" >Delete</button>
+                </div>
+                    </form>
+                </#if>
             </div>
         <#else>
             No message
