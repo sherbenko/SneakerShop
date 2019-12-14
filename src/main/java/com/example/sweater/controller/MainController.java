@@ -1,8 +1,8 @@
 package com.example.sweater.controller;
 
-import com.example.sweater.domain.Message;
+import com.example.sweater.domain.Product;
 import com.example.sweater.domain.User;
-import com.example.sweater.repos.MessageRepo;
+import com.example.sweater.repos.ProductRepo;
 import com.example.sweater.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Controller
 public class MainController {
     @Autowired
-    private MessageRepo messageRepo;
+    private ProductRepo productRepo;
     @Autowired
     private ProductService productService;
 
@@ -34,15 +34,15 @@ public class MainController {
 
     @GetMapping("/main")
     public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Product> products = productRepo.findAll();
 
         if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
+            products = productRepo.findByTag(filter);
         } else {
-            messages = messageRepo.findAll();
+            products = productRepo.findAll();
         }
 
-        model.addAttribute("messages", messages);
+        model.addAttribute("products", products);
         model.addAttribute("filter", filter);
 
         return "main";
@@ -54,7 +54,7 @@ public class MainController {
             @RequestParam String tag, Map<String, Object> model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-        Message message = new Message(text, tag, user);
+        Product product = new Product(text, tag, user);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -68,23 +68,23 @@ public class MainController {
 
             file.transferTo(new File(uploadPath + "/" + resultFilename));
 
-            message.setFilename(resultFilename);
+            product.setFilename(resultFilename);
         }
 
-        messageRepo.save(message);
+        productRepo.save(product);
 
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Product> products = productRepo.findAll();
 
-        model.put("messages", messages);
+        model.put("products", products);
 
         return "main";
     }
     @GetMapping(value="/delete/{id}")
     public String delete(@PathVariable Long id,Map<String, Object> model){
         productService.delete(id);
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Product> products = productRepo.findAll();
 
-        model.put("messages", messages);
+        model.put("products", products);
     return "redirect:/main";
     }
 

@@ -2,6 +2,6 @@
 <#import "parts/login.ftlh" as l>
 
 <@c.page>
-    ${message?ifExists}
+    ${product?ifExists}
     <@l.login "/login" false/>
 </@c.page>

@@ -3,7 +3,8 @@ package com.example.sweater.domain;
 import javax.persistence.*;
 
 @Entity
-public class Message {
+@Table(name = "product")
+public class Product {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
@@ -17,10 +18,10 @@ public class Message {
 
     private String filename;
 
-    public Message() {
+    public Product() {
     }
 
-    public Message(String text, String tag, User user) {
+    public Product(String text, String tag, User user) {
         this.author = user;
         this.text = text;
         this.tag = tag;
