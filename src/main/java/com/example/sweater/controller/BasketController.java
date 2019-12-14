@@ -67,5 +67,14 @@ public class BasketController {
         model.put("baskets", baskets);
         return "redirect:/main";
     }
+    @GetMapping("/ordersList")
+    public String userList(Map<String,Object> model) {
+        Iterable<Basket> baskets = basketRepo.findAll();
+//        baskets = basketRepo.findAllById(currentUserId);
+        baskets = basketRepo.findAll();
+        model.put("baskets", baskets);
+
+        return "ordersList";
+    }
 
 }
