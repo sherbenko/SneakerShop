@@ -1,2 +1,2 @@
-# sweater
+# Sneaker Shop
 Spring Boot learning
