@@ -4,7 +4,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -13,8 +17,17 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull
+    @Size(min=3,max=10)
+//    @NotBlank(message = "Username min 3 max 10")
     private String username;
+    @NotNull
+    @Size(min=2,max=10)
+//    @NotBlank(message = "Password min size = 2 ")
     private String password;
+    @Transient
+    @NotBlank(message = "Password confirmation cannot be empty")
+    transient private String password2;
     private boolean active;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -85,5 +98,27 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return password.equals(user.password) &&
+                password2.equals(user.password2);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(password, password2);
     }
 }
